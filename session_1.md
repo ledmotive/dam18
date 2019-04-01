@@ -1,3 +1,8 @@
+##### Name: Josep Carreras
+###### Main Assigment Session 1
+###### Finished on: Mon 1st of April 2019
+###### Due on: Wed 3rd of April 2019
+
 # ASSIGNEMENT SESSION 1
 
 
