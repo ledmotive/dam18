@@ -6,7 +6,7 @@
 # ASSIGNEMENT SESSION 1
 
 
-In this assignment, we've got two different logs from a travel website, where the users' transactions may result in either *correct* or *error*. Each transaction is marked with a timestamp. After analyzing the data from August, the whole team is challenged to reduce the number of errors for the following month, September. They will receive a salary bonus is they succeed. 
+In this assignment, we've got two different logs from a travel website, where the users' transactions may result in either *correct* or *error*. Each transaction is marked with a timestamp. After analyzing the data from August, the whole team is challenged to reduce the number of errors for the following month, September. They will receive a salary bonus if they succeed. 
 
 **Owing to all the data available, do they deserve the bonus?**
 
@@ -33,7 +33,7 @@ If we analyze the raw data without checking for potential outliers, we are to be
 #### Error rate, SEPTEMBER:
 ![Error_rate_September_nofilter](September_errors_nofilter.png)
 
-To judge from the plots above, one would conclude that the  errors in September have significantly decreased, going from an average error rate of 4.54% in August to 3.77% in September, which means that the team has at least partially done the job and probably deserves a good fraction of the bonus.
+To judge from the plots above, one would conclude that the  errors in September have significantly decreased, going from an average error rate of 1.50% in August to 0.96% in September, which means that the team has at least partially done the job and probably deserves a good fraction of the bonus.
 
 ## FINE OBSERVATION OF DATA RELIABILITY AND POTENTIAL OUTLIERS
 
@@ -55,32 +55,22 @@ The main key point here is that what happened on Aug. 18th can be considered as 
 
 In order to filter out potential outliers, a vector containing all the relative errors has been calculated associated to all the logs in a month. The mean value (mean) along its standard deviation (std) have been calculated separately for August and September.
 
-A particular log has been considered to be an outlier if its associated relative error is within 3 and 5 std values (2 scenarios have been considered here).
+A particular log has been considered to be an outlier if its associated relative error is within 3 std.
 
 
-### Scenario 1: Outliers are beyond 5 std's
-![August_errors_3std](August_errors_5std.png)
-If we assume that valid data must lie within a 5 std from the mean, we obtain a mean relative error almost equal, but a little bit more favorable to the methods used in September (error rate in August = 3.80%, while 3.77% in September). There is no much gain, and as we will see in scenario 2, it is probably due to a too soft definition of an outlier. 
-
-![September_errors_3std](September_errors_5std.png)
-
-### Scenario 2: Outliers are beyond 3 std's
+### Outliers are beyond 3 std's
 
 ![August_errors_3std](August_errors_3std.png)
-In these figures, it can be seen how after removing the outliers out of 3 std's both error rates (August vs September) are equal up to the second decimal point, resulting in the exact average error rate of 3.79%.
+In these figures, it can be seen how after removing the outliers out of 3 std's 1.25% in August and 0.86% in September.
 
 ![September_errors_3std](September_errors_3std.png)
 
 
 ## CONCLUSIONS
 
-A *naïve* processing of the raw data can lead to the conclusion that the team deserves the bonus, because apparently the relative and absolute errors have been reduced.
+After anylising the data in the quest of potential outliers, a singularity at Aug. 18th has been found, were the system reported unusual error rates that surpassed what it can be classified as normal working conditions. This may be a consequence of i.e. instability of the network environment or something that lies out of the reach of the developers participating in this challenge.  
 
-However, a preprocessing of the data in the quest of potential outliers has revealed a singularity at Aug. 18th, were the system reported unusual error rates that surpassed what it can be classified as normal working conditions. This may be a consequence of i.e. instability of the network environment or something that lies out of the reach of the developers participating in this challenge.  
-
-This means that August raw data cannot be directly used as a baseline, because it has an unusual high rate of errors due to what happened at Aug. 18th, which is biasing the distribution towards a worst baseline condition, and which in turn will improve the outcome of September errors when they are compared to the baseline.
-
-After filtering out the data to be within 3 standard deviations, it is clearly seen that the relative error rate has not improved in September (3.79%), and the team deserves no bonus at all. Sorry team!
+After filtering out the data to be within 3 standard deviations, it looks that there is a shy improvement on the error rate, but more statistical sampling is needed to draw any conclusion. 
 
 ## PYTHON CODE (version 3.7)
 

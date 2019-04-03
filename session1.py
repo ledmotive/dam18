@@ -196,8 +196,8 @@ if __name__=='__main__':
     #data_august = clean_data(data_august)
     #data_september = clean_data(data_september)
 
-    data_august = remove_outliers(data_august, sigma_times=5)
-    data_september = remove_outliers(data_september, sigma_times=5)
+    data_august = remove_outliers(data_august, sigma_times=3)
+    data_september = remove_outliers(data_september, sigma_times=3)
 ##################
 
 
