@@ -87,7 +87,7 @@ def get_error_plot(seconds, data, monthname):
     currentAxis.text(1, np.max(error_rate1*100)*1.05, '# of logs: ' + str(np.sum(error)+np.sum(correct)), color='k')
     currentAxis.text(1, np.max(error_rate1*100)*0.85, 'Total errors: ' + str(np.sum(error)), color='k')
     currentAxis.text(1, np.max(error_rate1*100)*0.65, 'error_rate=error/(error+correct)', color='k')
-    currentAxis.text(1, np.max(error_rate1*100)*0.45, 'mean error-rate: ' + str(np.mean(error)), color='k')
+    currentAxis.text(1, np.max(error_rate1*100)*0.45, 'mean error-rate: ' + str(np.mean(error_rate1)), color='k')
 
     pylab.ylabel('Error rate (%)')
 
@@ -97,7 +97,7 @@ def get_error_plot(seconds, data, monthname):
     currentAxis.text(1, np.max(error_rate2*100)*1.05, '# of logs: ' + str(np.sum(error) + np.sum(correct)), color='k')
     currentAxis.text(1, np.max(error_rate2*100)*0.85, 'Total errors: ' + str(np.sum(error)), color='k')
     currentAxis.text(1, np.max(error_rate2*100)*0.65, 'error_rate=error/users', color='k')
-    currentAxis.text(1, np.max(error_rate2*100)*0.45, 'mean error-rate: ' + str(np.mean(error)), color='k')
+    currentAxis.text(1, np.max(error_rate2*100)*0.45, 'mean error-rate: ' + str(np.mean(error_rate2)), color='k')
 
     pylab.xlabel('Time of the day (hours)')
     pylab.ylabel('Error rate (%)')
@@ -196,8 +196,8 @@ if __name__=='__main__':
     #data_august = clean_data(data_august)
     #data_september = clean_data(data_september)
 
-    data_august = remove_outliers(data_august, sigma_times=3)
-    data_september = remove_outliers(data_september, sigma_times=3)
+    #data_august = remove_outliers(data_august, sigma_times=3)
+    #data_september = remove_outliers(data_september, sigma_times=3)
 ##################
 
 
