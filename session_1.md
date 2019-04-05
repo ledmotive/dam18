@@ -51,26 +51,53 @@ Indeed, a more detailed analysis reveals to peculiarities of the data sets:
 
 The main key point here is that what happened on Aug. 18th can be considered as a rare event, probably out of the normal system specifications that would be required to establish a good baseline for comparison. In order to compensate for that, we need to remove the outliers before aiming at drawing any conclusion from the datasets.
 
+### REMOVE LOGS WHERE #OF USERS IS DIFFERENT FROM #ERROR + #CORRECT
+
+After removing these LOGS the error rate of August and September get closer:
+- Mean error rate in August: 0.013
+- Std of the error rate in August: 0.015 **!!!!!**
+- Mean error rate in September: 0.011
+- Std of the error rate in September: 0.013 **!!!!**
+
+This indicates that the statistical error present in the sample set does not allow to draw any conclusion.
+Either:
+- The potential improvement gained by the developer's team is too low to stand out from the STD
+- Or we need many more statistical samples to understand if mean values are statistically significant
+
 ## OUTLIER CORRECTION
 
 In order to filter out potential outliers, a vector containing all the relative errors has been calculated associated to all the logs in a month. The mean value (mean) along its standard deviation (std) have been calculated separately for August and September.
 
 A particular log has been considered to be an outlier if its associated relative error is within 3 std.
+After the outlier correction the situation is similar:
 
 
 ### Outliers are beyond 3 std's
 
 ![August_errors_3std](August_errors_3std.png)
-In these figures, it can be seen how after removing the outliers out of 3 std's 1.25% in August and 0.86% in September.
+In these figures, it can be seen how after removing the outliers out of 3 std's 1.17% in August and 1.00% in September.
+- Mean error rate in August: 0.0117
+- Std of the error rate in August: 0.0093 **!!!!!**
+- Mean error rate in September: 0.0100
+- Std of the error rate in September: 0.0077**!!!!**
+
+So not even cleaning the data we are able to stand out mean values from the noise!!
+
 
 ![September_errors_3std](September_errors_3std.png)
 
 
 ## CONCLUSIONS
 
-After anylising the data in the quest of potential outliers, a singularity at Aug. 18th has been found, were the system reported unusual error rates that surpassed what it can be classified as normal working conditions. This may be a consequence of i.e. instability of the network environment or something that lies out of the reach of the developers participating in this challenge.  
 
-After filtering out the data to be within 3 standard deviations, it looks that there is a shy improvement on the error rate, but more statistical sampling is needed to draw any conclusion. 
+After analysing the data it is found that we cannot draw any conclusion from the given distribution because it is too noisy.
+
+In the quest of cleaning data we have done 2 things:
+- Get rid of the data where #users was different from #error+#correct: average error rates got closer each other and the std diminished. But not enough.
+- Remove outliers (specially from what happened on Aug 18): average error rates got even closer and the std got smaller, but not enough for mena values to have significance and be compared
+
+All in all, or the team put more effort in reducing more significantly the number of errors, or they will have to use more statistics to demonstrate that a positive change has taken place.
+We cannot pay the bonus owing to the data provided. Sorry team!
 
 ## PYTHON CODE (version 3.7)
 
@@ -163,9 +190,10 @@ def get_error_plot(seconds, data, monthname):
     pylab.plot(seconds/3600, error_rate1*100, '.')
     currentAxis = pylab.gca()
     currentAxis.text(1, np.max(error_rate1*100)*1.05, '# of logs: ' + str(np.sum(error)+np.sum(correct)), color='k')
-    currentAxis.text(1, np.max(error_rate1*100)*0.85, 'Total errors: ' + str(np.sum(error)), color='k')
-    currentAxis.text(1, np.max(error_rate1*100)*0.65, 'error_rate=error/(error+correct)', color='k')
-    currentAxis.text(1, np.max(error_rate1*100)*0.45, 'mean error-rate: ' + str(np.mean(error)), color='k')
+    currentAxis.text(1, np.max(error_rate1*100)*0.95, 'Total errors: ' + str(np.sum(error)), color='k')
+    currentAxis.text(1, np.max(error_rate1*100)*0.85, 'error_rate=error/(error+correct)', color='k')
+    currentAxis.text(1, np.max(error_rate1*100)*0.75, 'mean error-rate: ' + str(np.mean(error_rate1)), color='k')
+    currentAxis.text(1, np.max(error_rate1*100)*0.65, 'std error-rate: ' + str(np.std(error_rate1)), color='k')
 
     pylab.ylabel('Error rate (%)')
 
@@ -173,9 +201,10 @@ def get_error_plot(seconds, data, monthname):
     pylab.plot(seconds / 3600, error_rate2 * 100, '.')
     currentAxis = pylab.gca()
     currentAxis.text(1, np.max(error_rate2*100)*1.05, '# of logs: ' + str(np.sum(error) + np.sum(correct)), color='k')
-    currentAxis.text(1, np.max(error_rate2*100)*0.85, 'Total errors: ' + str(np.sum(error)), color='k')
-    currentAxis.text(1, np.max(error_rate2*100)*0.65, 'error_rate=error/users', color='k')
-    currentAxis.text(1, np.max(error_rate2*100)*0.45, 'mean error-rate: ' + str(np.mean(error)), color='k')
+    currentAxis.text(1, np.max(error_rate2*100)*0.95, 'Total errors: ' + str(np.sum(error)), color='k')
+    currentAxis.text(1, np.max(error_rate2*100)*0.85, 'error_rate=error/users', color='k')
+    currentAxis.text(1, np.max(error_rate2*100)*0.75, 'mean error-rate: ' + str(np.mean(error_rate2)), color='k')
+    currentAxis.text(1, np.max(error_rate2*100)*0.65, 'std error-rate: ' + str(np.std(error_rate2)), color='k')
 
     pylab.xlabel('Time of the day (hours)')
     pylab.ylabel('Error rate (%)')
@@ -226,8 +255,6 @@ def get_month_plot(seconds, data, monthname):
     return month
 
 
-
-
 def clean_data(data):
     check = [int(data['logs'][i]['queries']['correct']) + int(data['logs'][i]['queries']['error']) ==
              int(data['logs'][i]['users']) for i in range(len(data['logs']))]
@@ -246,9 +273,6 @@ def remove_outliers(data, sigma_times):
     logs_correct = list(compress(data['logs'], np.asarray(check)==True))
     data['logs'] = logs_correct
     return data
-
-
-
 
 
 if __name__=='__main__':
@@ -271,11 +295,11 @@ if __name__=='__main__':
 ######  DATA CONDITIONING
 ## Comment in our out the following lines as per your convenience
 
-    #data_august = clean_data(data_august)
-    #data_september = clean_data(data_september)
+    data_august = clean_data(data_august)
+    data_september = clean_data(data_september)
 
-    data_august = remove_outliers(data_august, sigma_times=5)
-    data_september = remove_outliers(data_september, sigma_times=5)
+    data_august = remove_outliers(data_august, sigma_times=3)
+    data_september = remove_outliers(data_september, sigma_times=3)
 ##################
 
 
@@ -301,8 +325,8 @@ if __name__=='__main__':
     get_error_plot(august_seconds, data_august, 'August')
     get_error_plot(september_seconds, data_september, 'September')
 
+    print('this is the end')
 
-  
 ~~~~
 
 
